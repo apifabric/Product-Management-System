@@ -1,0 +1,48 @@
+{
+    "rules": [
+        {
+            "name": "NonEmptyDescription",
+            "description": "Ensure product descriptions are not empty",
+            "use_case": "Product",
+            "code": "if not self.description:\n    raise ValueError('Description should not be empty.')",
+            "error": null,
+            "status": "accepted",
+            "entity": "Product",
+            "id": "01JJYGF27739XC6H3QG2Z3ER77"
+        },
+        {
+            "name": "ValidUnitType",
+            "description": "Guarantee that unit types are accepted values",
+            "use_case": "Product",
+            "code": "if self.unit_type not in ['unit', 'kg', 'liter', 'meter']:\n    raise ValueError('Invalid unit type.')",
+            "error": null,
+            "status": "accepted",
+            "entity": "Product",
+            "id": "01JJYGF27R1VQTGCZJE8BAH9PQ"
+        },
+        {
+            "name": "NonEmptySizeColor",
+            "description": "Ensure product variant size and color are not empty when used",
+            "use_case": "ProductVariant",
+            "code": "if (self.size is None) or (self.color is None):\n    raise ValueError('Size and Color cannot be empty if specified.')",
+            "error": null,
+            "status": "accepted",
+            "entity": "ProductVariant",
+            "id": "01JJYGF284KQQ4W27ENKYFTZPB"
+        }
+    ],
+    "models": [
+        {
+            "classname": "Product",
+            "code": "class Product(Base):  # type: ignore\n    \"\"\"\n    description: This table represents all available products for sale and purchase, complete with unique identifiers, descriptions, photo URLs, and unit types.\n    \"\"\"\n    __tablename__ = 'product'\n    _s_collection_name = 'Product'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    description = Column(String, nullable=False)\n    photo_url = Column(String)\n    unit_type = Column(String)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    ProductTransactionList : Mapped[List[\"ProductTransaction\"]] = relationship(back_populates=\"product\")\n    ProductVariantList : Mapped[List[\"ProductVariant\"]] = relationship(back_populates=\"product\")"
+        },
+        {
+            "classname": "ProductTransaction",
+            "code": "class ProductTransaction(Base):  # type: ignore\n    \"\"\"\n    description: This table logs product transactions, identifying whether they were sales or purchases, along with quantities and timestamps.\n    \"\"\"\n    __tablename__ = 'product_transaction'\n    _s_collection_name = 'ProductTransaction'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    product_id = Column(ForeignKey('product.id'))\n    transaction_type = Column(String)\n    quantity = Column(Integer)\n    transaction_date = Column(DateTime)\n\n    # parent relationships (access parent)\n    product : Mapped[\"Product\"] = relationship(back_populates=(\"ProductTransactionList\"))"
+        },
+        {
+            "classname": "ProductVariant",
+            "code": "class ProductVariant(Base):  # type: ignore\n    \"\"\"\n    description: This table holds different variants for each product (e.g., size and color), with a link back to the parent product.\n    \"\"\"\n    __tablename__ = 'product_variant'\n    _s_collection_name = 'ProductVariant'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    product_id = Column(ForeignKey('product.id'))\n    size = Column(String)\n    color = Column(String)\n\n    # parent relationships (access parent)\n    product : Mapped[\"Product\"] = relationship(back_populates=(\"ProductVariantList\"))"
+        }
+    ]
+}

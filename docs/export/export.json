@@ -5,7 +5,7 @@
             "description": "Ensure product descriptions are not empty",
             "use_case": "Product",
             "code": "if not self.description:\n    raise ValueError('Description should not be empty.')",
-            "error": null,
+            "error": "NameError: name 'self' is not defined",
             "status": "accepted",
             "entity": "Product",
             "id": "01JJYGF27739XC6H3QG2Z3ER77"
@@ -15,7 +15,7 @@
             "description": "Guarantee that unit types are accepted values",
             "use_case": "Product",
             "code": "if self.unit_type not in ['unit', 'kg', 'liter', 'meter']:\n    raise ValueError('Invalid unit type.')",
-            "error": null,
+            "error": "NameError: name 'self' is not defined",
             "status": "accepted",
             "entity": "Product",
             "id": "01JJYGF27R1VQTGCZJE8BAH9PQ"
@@ -25,7 +25,7 @@
             "description": "Ensure product variant size and color are not empty when used",
             "use_case": "ProductVariant",
             "code": "if (self.size is None) or (self.color is None):\n    raise ValueError('Size and Color cannot be empty if specified.')",
-            "error": null,
+            "error": "NameError: name 'self' is not defined",
             "status": "accepted",
             "entity": "ProductVariant",
             "id": "01JJYGF284KQQ4W27ENKYFTZPB"

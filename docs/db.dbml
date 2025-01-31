@@ -1,0 +1,39 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Product: This table represents all available products for sale and purchase, complete with unique identifiers, descriptions, photo URLs, and unit types.
+ProductTransaction: This table logs product transactions, identifying whether they were sales or purchases, along with quantities and timestamps.
+ProductVariant: This table holds different variants for each product (e.g., size and color), with a link back to the parent product.
+'''
+}
+
+Table Product {
+    id INTEGER [primary key]
+    description VARCHAR 
+    photo_url VARCHAR 
+    unit_type VARCHAR 
+    }
+
+Table ProductTransaction {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    transaction_type VARCHAR 
+    quantity INTEGER 
+    transaction_date DATETIME 
+    }
+
+Table ProductVariant {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    size VARCHAR 
+    color VARCHAR 
+    }
+
+
+
+// Relationships
+    Ref: ProductTransaction.(product_id) < Product.(id)
+    Ref: ProductVariant.(product_id) < Product.(id)

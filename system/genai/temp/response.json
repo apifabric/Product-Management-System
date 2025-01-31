@@ -1,0 +1,98 @@
+{
+    "models": [
+        {
+            "classname": "Product",
+            "code": "class Product(Base):\n    __tablename__ = 'product'\n    id = Column(Integer, primary_key=True)\n    description = Column(String, nullable=False)\n    photo_url = Column(String)\n    unit_type = Column(String)\n",
+            "description": "This table represents all available products for sale and purchase, complete with unique identifiers, descriptions, photo URLs, and unit types.",
+            "name": "Product"
+        },
+        {
+            "classname": "ProductVariant",
+            "code": "class ProductVariant(Base):\n    __tablename__ = 'product_variant'\n    id = Column(Integer, primary_key=True)\n    product_id = Column(Integer, ForeignKey('product.id'))\n    size = Column(String)\n    color = Column(String)\n",
+            "description": "This table holds different variants for each product (e.g., size and color), with a link back to the parent product.",
+            "name": "ProductVariant"
+        },
+        {
+            "classname": "ProductTransaction",
+            "code": "class ProductTransaction(Base):\n    __tablename__ = 'product_transaction'\n    id = Column(Integer, primary_key=True)\n    product_id = Column(Integer, ForeignKey('product.id'))\n    transaction_type = Column(String)\n    quantity = Column(Integer)\n    transaction_date = Column(DateTime, default=datetime.utcnow)\n",
+            "description": "This table logs product transactions, identifying whether they were sales or purchases, along with quantities and timestamps.",
+            "name": "ProductTransaction"
+        }
+    ],
+    "rules": [
+        {
+            "name": "NonEmptyDescription",
+            "description": "Ensure product descriptions are not empty",
+            "use_case": "Product",
+            "entity": "Product",
+            "code": "if not self.description:\n    raise ValueError('Description should not be empty.')"
+        },
+        {
+            "name": "ValidUnitType",
+            "description": "Guarantee that unit types are accepted values",
+            "use_case": "Product",
+            "entity": "Product",
+            "code": "if self.unit_type not in ['unit', 'kg', 'liter', 'meter']:\n    raise ValueError('Invalid unit type.')"
+        },
+        {
+            "name": "NonEmptySizeColor",
+            "description": "Ensure product variant size and color are not empty when used",
+            "use_case": "ProductVariant",
+            "entity": "ProductVariant",
+            "code": "if (self.size is None) or (self.color is None):\n    raise ValueError('Size and Color cannot be empty if specified.')"
+        }
+    ],
+    "test_data": "Test data rows created individually in separate objects for Product, ProductVariant, and ProductTransaction tables.",
+    "test_data_rows": [
+        {
+            "test_data_row_variable": "product1",
+            "code": "product1 = Product(id=1, description='Smartphone', photo_url='http://example.com/smartphone.jpg', unit_type='unit')"
+        },
+        {
+            "test_data_row_variable": "product2",
+            "code": "product2 = Product(id=2, description='Laptop', photo_url='http://example.com/laptop.jpg', unit_type='unit')"
+        },
+        {
+            "test_data_row_variable": "product3",
+            "code": "product3 = Product(id=3, description='Milk', photo_url='http://example.com/milk.jpg', unit_type='liter')"
+        },
+        {
+            "test_data_row_variable": "product4",
+            "code": "product4 = Product(id=4, description='Bread', photo_url='http://example.com/bread.jpg', unit_type='unit')"
+        },
+        {
+            "test_data_row_variable": "variant1",
+            "code": "variant1 = ProductVariant(id=1, product_id=1, size='Large', color='Black')"
+        },
+        {
+            "test_data_row_variable": "variant2",
+            "code": "variant2 = ProductVariant(id=2, product_id=2, size='15-inch', color='Silver')"
+        },
+        {
+            "test_data_row_variable": "variant3",
+            "code": "variant3 = ProductVariant(id=3, product_id=3, size='1-liter', color='White')"
+        },
+        {
+            "test_data_row_variable": "variant4",
+            "code": "variant4 = ProductVariant(id=4, product_id=4, size='Medium', color='Brown')"
+        },
+        {
+            "test_data_row_variable": "transaction1",
+            "code": "transaction1 = ProductTransaction(id=1, product_id=1, transaction_type='sale', quantity=5, transaction_date=datetime(2023, 10, 5))"
+        },
+        {
+            "test_data_row_variable": "transaction2",
+            "code": "transaction2 = ProductTransaction(id=2, product_id=2, transaction_type='purchase', quantity=8, transaction_date=datetime(2023, 10, 6))"
+        },
+        {
+            "test_data_row_variable": "transaction3",
+            "code": "transaction3 = ProductTransaction(id=3, product_id=3, transaction_type='sale', quantity=10, transaction_date=datetime(2023, 10, 7))"
+        },
+        {
+            "test_data_row_variable": "transaction4",
+            "code": "transaction4 = ProductTransaction(id=4, product_id=4, transaction_type='purchase', quantity=2, transaction_date=datetime(2023, 10, 8))"
+        }
+    ],
+    "test_data_sqlite": "INSERT INTO product (id, description, photo_url, unit_type) VALUES (1, 'Smartphone', 'http://example.com/smartphone.jpg', 'unit');\nINSERT INTO product (id, description, photo_url, unit_type) VALUES (2, 'Laptop', 'http://example.com/laptop.jpg', 'unit');\nINSERT INTO product_variant (id, product_id, size, color) VALUES (1, 1, 'Large', 'Black');\nINSERT INTO product_variant (id, product_id, size, color) VALUES (2, 2, '15-inch', 'Silver');",
+    "name": "Product Management System"
+}

@@ -1,0 +1,113 @@
+about:
+  date: January 31, 2025 15:42:43
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 2
+  number_tables: 3
+info_toggle_checked: true
+resources:
+  Product:
+    attributes:
+    - label: ' description*'
+      name: description
+      required: true
+      search: true
+      sort: true
+    - name: photo_url
+    - name: unit_type
+    - name: id
+    description: This table represents all available products for sale and purchase,
+      complete with unique identifiers, descriptions, photo URLs, and unit types.
+    info_list: This table represents all available products for sale and purchase,
+      complete with unique identifiers, descriptions, photo URLs, and unit types.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - product_id
+      name: ProductTransactionList
+      resource: ProductTransaction
+    - direction: tomany
+      fks:
+      - product_id
+      name: ProductVariantList
+      resource: ProductVariant
+    type: Product
+    user_key: description
+  ProductTransaction:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+    - name: transaction_type
+    - name: quantity
+    - name: transaction_date
+      type: DATETIME
+    description: This table logs product transactions, identifying whether they were
+      sales or purchases, along with quantities and timestamps.
+    info_list: This table logs product transactions, identifying whether they were
+      sales or purchases, along with quantities and timestamps.
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: ProductTransaction
+    user_key: id
+  ProductVariant:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+    - name: size
+    - name: color
+    description: This table holds different variants for each product (e.g., size
+      and color), with a link back to the parent product.
+    info_list: This table holds different variants for each product (e.g., size and
+      color), with a link back to the parent product.
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: ProductVariant
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'
